@@ -8,16 +8,16 @@ struct Date{
 	
 };
 
-void init_date(Date& today, int y, int m, int d){
+void init_day(Date& today, int y, int m, int d){
 
 	if (m < 1 || m > 12)
 	{
-		simple_error("Invalid month!");
+		error ("Invalid month!");
 	}
 
 	if (d < 1 || d > 31)
 	{
-		simple_error("Invalid day!");
+		error ("Invalid day!");
 	}
 
 	today.y = y;
@@ -26,20 +26,20 @@ void init_date(Date& today, int y, int m, int d){
 }
 
 
-void add_day(Date& today){
+void add_day(Date& dd,int n){
 
-	today.d = today.d + 1;
+	dd.d = dd.d + n;
 
-	if (today.d > 31)
+	if (dd.d > 31)
 	{
-		today.m = today.m + 1;
-		today.d = 1;
+		dd.m = dd.m + 1;
+		dd.d = 1;
 	}
 
-	if (today.m > 12)
+	if (dd.m > 12)
 	{
-		today.y = today.y + 1;
-		today.m = 1;
+		dd.y = dd.y + 1;
+		dd.m = 1;
 	}
 }
 
@@ -49,10 +49,9 @@ void add_day(Date& today){
 int main(){
 
 Date today;
-init_date(today, 1978, 6, 25);
-
+init_day(today, 1978, 13, 31);
 Date tomorrow(today);
-add_day(tomorrow);
+add_day(tomorrow,1);
 
 
 

@@ -28,39 +28,29 @@ void Date::add_day(int n)
 {
     d += n;
     
-    while(d < 1 || d > 31){
-
-	    if (d > 31){ 
-	    	++m;
-	    	d -= 31;
-	    }
-
-	    if (d < 1){
-	    	--m;
-	    	d += 31;
-	    }
-	}
-
-
-    while(m < 1 || m > 12){
-	    if (m > 12){
-	    	++y;
-	    	m -= 12;
-	    }
-
-
-	    if (m < 1){
-	    --y;
-	    m += 12;
-		}
+    
+ 	while( d < 1  || d > 31 ){
+	if (d > 31)
+	{
+		m++;
+		d -=31;
 	}
 }
+	while ( m < 1 || m > 12){
+	if (m > 12)
+	{
+		y++;
+		m -=12 ;
+	}
+}
+}
+
 
 
 
 int main(){
 
-Date today{1978, 6, 25};
+Date today{1978, 12, 31};
 
 cout << "Today: " << today.y << "." << today.m << "." << today.d << "." << endl;
 

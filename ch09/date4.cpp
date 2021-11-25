@@ -22,6 +22,11 @@ Month operator++(Month& m)
 	m = (m==Month::dec) ? Month::jan : Month(int(m)+1);
 	return m;
 }
+Month operator--(Month& m) 
+{ 
+	m = (m==Month::jan) ? Month::dec : Month(int(m)-1);
+	return m;
+}
 
 
 class Year {
@@ -31,14 +36,14 @@ class Year {
 public:
 
 	class Invalid { };
-	Year(int x)
-	:y{x} 
+	Year(int x):y{x} 
 	{
 		if (x<min || max<=x) throw Invalid{}; 
 	}
 	int year() { return y; }
 	void increment() { y++; }
-
+	void decrease() {y--;}
+		
 private:
 
 	int y;
@@ -46,84 +51,74 @@ private:
 	};
 
 
-	Year operator++(Year& year)
+Year operator++(Year& year)
 {
 	year.increment();
 }
-
-
-
-ostream& operator<< (ostream& os, Year year)
-{
-	return os << year.year();
+Year operator--(Year& year){
+	year.decrease();
 }
-
-
 
 class Date{
 public:
-
-	Date(Year y, Month m, int d): ye(y), mo (m), da(d){
+	class Invalid{};
+	Date(Year y, Month m, int d): y(y), m (m), d(d){
 
 		if (d < 1 || d > 31) throw Invalid{};
 	};
 	
-	class Invalid{};
 
 	int month(){
-		return int(mo);
+		return int(m);
 	}
-
+	 
 	int day(){
-		return da;
+		return d;
 	}
 
 	int year(){
-		return ye.year();
+		return y.year();
 	}
-
-
-	void add_day(int n)
-	{
-    da += n;
-    
-    while(da > 31){
-
-	    if (da > 31){ 
-	    	++mo;
-
-	    	if (mo == Month::jan)
-	    	{
-	    		++ye;
-	    	}
-
-
-
-	    	da -= 31;
-	    }
-	}
-
-};
-
+	void add_day(int n);
 
 private:
-	int da;
-	Year ye;
-	Month mo;
+	int d;
+	Year y;
+	Month m;
 };
+void Date::add_day(int n){
+	
+     	d += n;
+     	while( d < 1  || d > 31 ){
+	if (d > 31){
+		 ++m; d -= 31;
+		 if (m == Month::jan)
+	    	 {
+	    		++y;
+	    	 }
+		  }     
+	if (d < 1){
+		 --m; d += 31;
+		 if (m == Month::dec)
+		        --y;
+		  }     
+		 }     
 
 
-int main()
+}
+int main(){
 try{
-	Date today(Year{1978},Month::jun,25);
+	Date today(Year{1978},Month::dec,31);
 	cout << "Today: " << today.year() << "." << today.month() << "." << today.day() << "." << endl;
 
 	Date tomorrow = today;
 	tomorrow.add_day(1);
-	cout << "Today: " << tomorrow.year() << "." << tomorrow.month() << "." << tomorrow.day() << "." << endl;	
+	cout << "Tomorrow: " << tomorrow.year() << "." << tomorrow.month() << "." << tomorrow.day() << "." << endl;	
 
 	return 0;
 }
 catch(Date::Invalid){
 	error("Invalid date!");
+}
+
 }
